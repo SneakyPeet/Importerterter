@@ -18,18 +18,16 @@ namespace StockImport
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            var total = Directory
-                .GetFiles(filesDirectory)
-                .ImportToSql(FileExtensions.ProcessFile);
+            //var total = Directory
+            //    .GetFiles(filesDirectory)
+            //    .ImportToSql(ImportExtensions.ProcessFile);
 
             stopWatch.Stop();
 
-            Console.WriteLine(total + " rows imported in " + stopWatch.Elapsed);
+            //Console.WriteLine(total + " rows imported in " + stopWatch.Elapsed);
 
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
         }
-
-        
     }
 }

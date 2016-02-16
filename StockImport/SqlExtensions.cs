@@ -10,7 +10,7 @@ namespace StockImport
         private const string connectionString = "Server=.;Database=Stocks;Trusted_Connection=True;";
         private const string tableName = "dbo.Stocks";
 
-        public static int ImportToSql(this IEnumerable<string> files, Func<string, IEnumerable<Stock>> processFile)
+        public static int ImportToSql(this IEnumerable<string> files, Func<string, IEnumerable<ProcessedQuote>> processFile)
         {
             var total = 0;
             using (var connection = new SqlConnection(connectionString))
@@ -18,7 +18,7 @@ namespace StockImport
                 connection.Open();
                 foreach(var file in files)
                 {
-                    var stock = processFile(file).AsDataTable();
+                    var stock = new Share(file).AsDataTable();
                     BulkInsertStock(connection, stock);
                     total += stock.Rows.Count;
                 }
@@ -48,7 +48,7 @@ namespace StockImport
             transaction.Commit();
         }
 
-        private static DataTable AsDataTable(this IEnumerable<Stock> data)
+        private static DataTable AsDataTable(this Share share)
         {
             var table = new DataTable();
             table.Columns.Add("Date", typeof(DateTime));
@@ -59,17 +59,17 @@ namespace StockImport
             table.Columns.Add("Volume", typeof(Decimal));
             table.Columns.Add("AdjClose", typeof(Decimal));
             table.Columns.Add("StockId", typeof(string));
-            foreach (var item in data)
+            foreach (var pq in share.ProcessedQuotes)
             {
                 DataRow row = table.NewRow();
-                row["Date"] = item.Date;
-                row["Open"] = item.Open;
-                row["High"] = item.High;
-                row["Low"] = item.Low;
-                row["Close"] = item.Close;
-                row["Volume"] = item.Volume;
-                row["AdjClose"] = item.AdjClose;
-                row["StockId"] = item.StockId;
+                row["Date"] = pq.Quote.Date;
+                row["Open"] = pq.Quote.Open;
+                row["High"] = pq.Quote.High;
+                row["Low"] = pq.Quote.Low;
+                row["Close"] = pq.Quote.Close;
+                row["Volume"] = pq.Quote.Volume;
+                row["AdjClose"] = pq.Quote.AdjClose;
+                row["StockId"] = share.Id;
                 table.Rows.Add(row);
             }
             return table;

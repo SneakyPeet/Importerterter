@@ -6,7 +6,7 @@ namespace StockImport
     [DelimitedRecord(",")]
     [IgnoreFirst]
     [IgnoreEmptyLines]
-    public class StockImport
+    public class Quote
     {
         [FieldOrder(1)]
         [FieldConverter(ConverterKind.Date, "yyyy-MM-dd")]
