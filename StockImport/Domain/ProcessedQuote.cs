@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace StockImport
+namespace StockImport.Domain
 {
     public class ProcessedQuote : Dictionary<Calculation, Decimal>
     {

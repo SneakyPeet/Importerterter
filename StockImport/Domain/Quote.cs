@@ -1,7 +1,7 @@
 ﻿using System;
 using FileHelpers;
 
-namespace StockImport
+namespace StockImport.Domain
 {
     [DelimitedRecord(",")]
     [IgnoreFirst]

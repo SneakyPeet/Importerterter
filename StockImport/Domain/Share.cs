@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
-using StockImport.Analisys;
+using StockImport.Calculators;
+using StockImport.Helpers;
 
-namespace StockImport
+namespace StockImport.Domain
 {
     public class Share
     {
         public readonly List<ProcessedQuote> ProcessedQuotes;
         public string Id { get; private set; } 
 
-        public Share(string filePath)
+        public Share(string filePath, ProcessEngine engine)
         {
             this.Id = filePath.ToShareId();
 
@@ -19,15 +20,15 @@ namespace StockImport
                 .Order()
                 .ToProcessableStock();
 
-            Process();
+            this.Process(engine);
         }
 
-        private void Process()
+        private void Process(ProcessEngine engine)
         {
             var sma12 = new MovingAverageCalculator(12);
-            foreach(var stock in this.ProcessedQuotes)
+            foreach(var quote in this.ProcessedQuotes)
             {
-                stock.Add(Calculation.Sma12, sma12.NextValue(stock.Quote.Close));
+                engine.Process(quote);
             }
         }
     }

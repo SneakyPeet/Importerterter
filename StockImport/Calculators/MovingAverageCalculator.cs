@@ -1,6 +1,7 @@
 ﻿using System;
+using StockImport.Domain;
 
-namespace StockImport.Analisys
+namespace StockImport.Calculators
 {
     /// <summary>
     /// Calculates a moving average value over a specified window.  The window size must be specified
@@ -12,7 +13,7 @@ namespace StockImport.Analisys
     /// Happy coding.
     ///
     /// Updated 29 March 2007.  Added a Reset() method.</remarks>
-    public class MovingAverageCalculator
+    public class MovingAverageCalculator : ICalculator
     {
         private readonly int windowSize;
         private readonly decimal[] windowValues;
@@ -28,7 +29,7 @@ namespace StockImport.Analisys
             this.windowSize = windowSize;
             this.windowValues = new decimal[this.windowSize];
 
-            Reset();
+            this.Reset();
         }
 
         /// <summary>
@@ -41,7 +42,7 @@ namespace StockImport.Analisys
             // add new value to the sum
             this.sum += nextValue;
 
-            if (!IsMature)
+            if (!this.IsMature)
             {
                 // we haven't yet filled our window
                 this.totalValuesInWindow++;

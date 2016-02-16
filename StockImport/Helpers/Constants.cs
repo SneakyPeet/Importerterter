@@ -1,4 +1,4 @@
-﻿namespace StockImport
+﻿namespace StockImport.Helpers
 {
     static class Constants
     {

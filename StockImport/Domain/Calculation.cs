@@ -1,4 +1,4 @@
-﻿namespace StockImport
+﻿namespace StockImport.Domain
 {
     public enum Calculation
     {

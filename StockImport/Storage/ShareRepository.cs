@@ -1,54 +1,49 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using StockImport.Domain;
 
-namespace StockImport
+namespace StockImport.Storage
 {
-    public static class SqlExtensions
+    class ShareRepository : IShareRepository 
     {
-        private const string connectionString = "Server=.;Database=Stocks;Trusted_Connection=True;";
-        private const string tableName = "dbo.Stocks";
+        private readonly SqlConnection connection;
+        private readonly string tableName;
 
-        public static int ImportToSql(this IEnumerable<string> files, Func<string, IEnumerable<ProcessedQuote>> processFile)
+        public ShareRepository(string connectionString, string tableName)
         {
-            var total = 0;
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                foreach(var file in files)
-                {
-                    var stock = new Share(file).AsDataTable();
-                    BulkInsertStock(connection, stock);
-                    total += stock.Rows.Count;
-                }
-                connection.Close();
-            }
-            return total;
+            this.tableName = tableName;
+            this.connection = new SqlConnection(connectionString);
+            this.connection.Open();
         }
 
-        private static void BulkInsertStock(SqlConnection connection, DataTable stock)
+        public void Save(Share share)
         {
-            var transaction = connection.BeginTransaction();
+            var data = AsDataTable(share);
+            this.BulkInsertStock(data);
+        }
 
-            using(var bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
+        private void BulkInsertStock(DataTable stock)
+        {
+            var transaction = this.connection.BeginTransaction();
+
+            using (var bulkCopy = new SqlBulkCopy(this.connection, SqlBulkCopyOptions.Default, transaction))
             {
-                bulkCopy.DestinationTableName = tableName;
+                bulkCopy.DestinationTableName = this.tableName;
                 try
                 {
                     bulkCopy.WriteToServer(stock);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     transaction.Rollback();
-                    connection.Close();
                     throw;
                 }
             }
             transaction.Commit();
         }
 
-        private static DataTable AsDataTable(this Share share)
+        private static DataTable AsDataTable(Share share)
         {
             var table = new DataTable();
             table.Columns.Add("Date", typeof(DateTime));
@@ -74,7 +69,20 @@ namespace StockImport
             }
             return table;
         }
-    }
 
-    
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.connection.Close();
+                this.connection.Dispose();
+            }
+        }
+    }
 }

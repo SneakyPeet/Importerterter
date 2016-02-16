@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FileHelpers;
+using StockImport.Domain;
 
-namespace StockImport
+namespace StockImport.Helpers
 {
     public static class ImportExtensions
     {
