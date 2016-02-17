@@ -3,19 +3,19 @@ using StockImport.Domain;
 
 namespace StockImport.Calculators
 {
-    public class ExponentialMovingAverageCalculator : ICalculator
+    public class EmaCalculator : ICalculator
     {
-        private readonly MovingAverageCalculator sma;
+        private readonly SmaCalculator sma;
         private readonly decimal multiplier;
         private decimal previousEma;
         private bool isMature;
 
-        public ExponentialMovingAverageCalculator(int windowSize)
+        public EmaCalculator(int windowSize)
         {
             if (windowSize < 1)
                 throw new ArgumentOutOfRangeException("windowSize", windowSize, "Window size must be greater than zero.");
 
-            this.sma = new MovingAverageCalculator(windowSize);
+            this.sma = new SmaCalculator(windowSize);
             this.multiplier = 2m / (windowSize + 1);
             Reset();
         }

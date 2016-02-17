@@ -65,8 +65,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Calculators\ExponentialAverageCalculator.cs" />
-    <Compile Include="Calculators\MovingAverageCalculator.cs" />
+    <Compile Include="Calculators\MacdCalculator.cs" />
+    <Compile Include="Calculators\EmaCalculator.cs" />
+    <Compile Include="Calculators\SmaCalculator.cs" />
     <Compile Include="Domain\Calculation.cs" />
     <Compile Include="Domain\ICalculator.cs" />
     <Compile Include="Domain\IQuote.cs" />

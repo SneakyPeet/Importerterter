@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using StockImport.Calculators;
-using StockImport.Import;
 
 namespace StockImport.Domain
 {
@@ -30,7 +29,7 @@ namespace StockImport.Domain
 
         private void Process(ProcessEngine engine)
         {
-            var sma12 = new MovingAverageCalculator(12);
+            var sma12 = new SmaCalculator(12);
             foreach(var quote in this.ProcessedQuotes)
             {
                 engine.Process(quote);

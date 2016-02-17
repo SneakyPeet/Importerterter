@@ -40,11 +40,11 @@ namespace StockImport
         private static ProcessEngine BootstrapProcessEngine()
         {
             var engine = new ProcessEngine();
-            engine.Add(Calculation.Sma12, new MovingAverageCalculator(12));
-            engine.Add(Calculation.Sma20, new MovingAverageCalculator(20));
-            engine.Add(Calculation.Sma50, new MovingAverageCalculator(50));
-            engine.Add(Calculation.Ema12, new ExponentialMovingAverageCalculator(12));
-            engine.Add(Calculation.Ema20, new ExponentialMovingAverageCalculator(20));
+            engine.Add(Calculation.Sma12, new SmaCalculator(12));
+            engine.Add(Calculation.Sma20, new SmaCalculator(20));
+            engine.Add(Calculation.Sma50, new SmaCalculator(50));
+            engine.Add(Calculation.Ema12, new EmaCalculator(12));
+            engine.Add(Calculation.Ema20, new EmaCalculator(20));
             return engine;
         }
     }

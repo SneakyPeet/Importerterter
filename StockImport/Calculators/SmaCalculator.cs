@@ -13,7 +13,7 @@ namespace StockImport.Calculators
     /// Happy coding.
     ///
     /// Updated 29 March 2007.  Added a Reset() method.</remarks>
-    public class MovingAverageCalculator : ICalculator
+    public class SmaCalculator : ICalculator
     {
         private readonly int windowSize;
         private readonly decimal[] windowValues;
@@ -21,7 +21,7 @@ namespace StockImport.Calculators
         private decimal sum;
         private int totalValuesInWindow;
 
-        public MovingAverageCalculator(int windowSize)
+        public SmaCalculator(int windowSize)
         {
             if (windowSize < 1)
                 throw new ArgumentOutOfRangeException("windowSize", windowSize, "Window size must be greater than zero.");
