@@ -34,7 +34,7 @@ namespace StockImport.Storage
                 {
                     bulkCopy.WriteToServer(stock);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     transaction.Rollback();
                     throw;
@@ -46,6 +46,21 @@ namespace StockImport.Storage
         private static DataTable AsDataTable(Share share)
         {
             var table = new DataTable();
+            AddQuoteColumns(table);
+            AddCalculatedColumns(table, share);
+            foreach (var pq in share.ProcessedQuotes)
+            {
+                DataRow row = table.NewRow();
+                AddQuoteRowData(share.Id, row, pq);
+                AddCalculatedRowData(row, pq);
+                table.Rows.Add(row);
+            }
+            return table;
+        }
+
+        private static void AddQuoteColumns(DataTable table)
+        {
+            table.Columns.Add("StockId", typeof(string));
             table.Columns.Add("Date", typeof(DateTime));
             table.Columns.Add("Open", typeof(Decimal));
             table.Columns.Add("High", typeof(Decimal));
@@ -53,21 +68,35 @@ namespace StockImport.Storage
             table.Columns.Add("Close", typeof(Decimal));
             table.Columns.Add("Volume", typeof(Decimal));
             table.Columns.Add("AdjClose", typeof(Decimal));
-            table.Columns.Add("StockId", typeof(string));
-            foreach (var pq in share.ProcessedQuotes)
+        }
+
+        private static void AddCalculatedColumns(DataTable table, Share share)
+        {
+            foreach(var calculation in share.Calculations)
             {
-                DataRow row = table.NewRow();
-                row["Date"] = pq.Quote.Date;
-                row["Open"] = pq.Quote.Open;
-                row["High"] = pq.Quote.High;
-                row["Low"] = pq.Quote.Low;
-                row["Close"] = pq.Quote.Close;
-                row["Volume"] = pq.Quote.Volume;
-                row["AdjClose"] = pq.Quote.AdjClose;
-                row["StockId"] = share.Id;
-                table.Rows.Add(row);
+                table.Columns.Add(calculation.ToString(), typeof(Decimal));
             }
-            return table;
+        }
+
+        private static void AddQuoteRowData(string shareId, DataRow row, ProcessedQuote pq)
+        {
+            row["StockId"] = shareId;
+            row["Date"] = pq.Quote.Date;
+            row["Open"] = pq.Quote.Open;
+            row["High"] = pq.Quote.High;
+            row["Low"] = pq.Quote.Low;
+            row["Close"] = pq.Quote.Close;
+            row["Volume"] = pq.Quote.Volume;
+            row["AdjClose"] = pq.Quote.AdjClose;
+        }
+
+        private static void AddCalculatedRowData(DataRow row, ProcessedQuote pq)
+        {
+            foreach (var calculation in pq)
+            {
+                row[calculation.Key.ToString()] = calculation.Value;
+            }
+            
         }
 
         public void Dispose()

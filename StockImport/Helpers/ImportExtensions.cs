@@ -14,6 +14,11 @@ namespace StockImport.Helpers
             return Path.GetFileNameWithoutExtension(filePath);
         }
 
+        public static string[] Files(this string directoryPath)
+        {
+            return Directory.GetFiles(directoryPath);
+        }
+
         public static IEnumerable<Quote> ReadFile(this string filePath)
         {
             var fileEngine = new DelimitedFileEngine<Quote>();
@@ -27,7 +32,8 @@ namespace StockImport.Helpers
 
         public static IEnumerable<Quote> Clean(this IEnumerable<Quote> stock)
         {
-            throw new NotImplementedException();
+            //todo
+            return stock;
         }
 
         public static List<ProcessedQuote> ToProcessableStock(this IEnumerable<Quote> stock)
