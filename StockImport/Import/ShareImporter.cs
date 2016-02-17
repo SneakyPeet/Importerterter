@@ -14,9 +14,8 @@ namespace StockImport.Domain
             this.processEngine = processEngine;
         }
 
-        public int Import(string directory)
+        public int Import(string[] files)
         {
-            var files = directory.Files();
             var totalRecords = 0;
             foreach(var file in files)
             {
