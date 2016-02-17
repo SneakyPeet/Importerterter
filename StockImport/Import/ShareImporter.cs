@@ -6,23 +6,26 @@ namespace StockImport.Domain
     public class ShareImporter
     {
         private readonly IShareRepository repo;
-        private readonly ProcessEngine processEngine;
+        private readonly ProcessEngine engine;
 
-        public ShareImporter(IShareRepository repo, ProcessEngine processEngine)
+        public ShareImporter(IShareRepository repo, ProcessEngine engine)
         {
             this.repo = repo;
-            this.processEngine = processEngine;
+            this.engine = engine;
         }
 
+        //todo explore parralelization here
         public int Import(string[] files)
         {
             var totalRecords = 0;
+            engine.Reset();
             foreach(var file in files)
             {
-                processEngine.Reset();
-                var shareId = file.ToShareId();
-                var quotes = file.ReadFile();
-                var share = new Share(shareId, quotes, processEngine);
+                var share = new Share(
+                    file.ToShareId(),
+                    file.ReadFile(),
+                    engine
+                );
                 repo.Save(share);
                 totalRecords += share.ProcessedQuotes.Count;
             }

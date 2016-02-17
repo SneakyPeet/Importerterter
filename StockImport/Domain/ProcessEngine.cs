@@ -10,6 +10,7 @@ namespace StockImport.Domain
             {
                 quote.Add(calculator.Key, calculator.Value.NextValue(quote.Quote.Close));
             }
+               
         }
 
         public void Reset()

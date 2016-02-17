@@ -17,7 +17,7 @@ namespace StockImport
         private const string filesDirectory = "C:\\Development\\stocks\\Data2";
         private const string connectionString = "Server=.;Database=Stocks;Trusted_Connection=True;";
         private const string tableName = "dbo.Stocks";
-        private const int concurrentBatches = 10;
+        private const int concurrentBatches = 8;
         
         static void Main(string[] args)
         {
@@ -45,17 +45,6 @@ namespace StockImport
             return total;
         }
 
-        private static ProcessEngine BootstrapProcessEngine()
-        {
-            var engine = new ProcessEngine();
-            engine.Add(Calculation.Sma12, new SmaCalculator(12));
-            engine.Add(Calculation.Sma20, new SmaCalculator(20));
-            engine.Add(Calculation.Sma50, new SmaCalculator(50));
-            engine.Add(Calculation.Ema12, new EmaCalculator(12));
-            engine.Add(Calculation.Ema20, new EmaCalculator(20));
-            return engine;
-        }
-
         private static List<string[]> GetBatches(string directory, int batchTotal)
         {
             var files = directory.Files();
@@ -72,26 +61,26 @@ namespace StockImport
             return batches;
         }
 
-        private static int ProcessBatch(IEnumerable<string> files)
+        private static int ProcessBatch(string[] files)
         {
-            var totalRecords = 0;
-            var processEngine = BootstrapProcessEngine();
             using (var repo = new ShareRepository(connectionString, tableName))
             {
-                foreach (var file in files)
-                {
-                    processEngine.Reset();
-                    var shareId = file.ToShareId();
-                    var quotes = file.ReadFile();
-                    var share = new Share(shareId, quotes, processEngine);
-                    repo.Save(share);
-                    totalRecords += share.ProcessedQuotes.Count;
-                }
+                var engine = BootstrapProcessEngine();
+                var importer = new ShareImporter(repo, engine);
+                return importer.Import(files);
             }
 
-            return totalRecords;
         }
 
-        
+        private static ProcessEngine BootstrapProcessEngine()
+        {
+            var engine = new ProcessEngine();
+            engine.Add(Calculation.Sma12, new SmaCalculator(12));
+            engine.Add(Calculation.Sma20, new SmaCalculator(20));
+            engine.Add(Calculation.Sma50, new SmaCalculator(50));
+            engine.Add(Calculation.Ema12, new EmaCalculator(12));
+            engine.Add(Calculation.Ema20, new EmaCalculator(20));
+            return engine;
+        }
     }
 }
