@@ -75,11 +75,26 @@ namespace StockImport
         private static ProcessEngine BootstrapProcessEngine()
         {
             var engine = new ProcessEngine();
-            engine.Add(Calculation.Sma12, new SmaCalculator(12));
-            engine.Add(Calculation.Sma20, new SmaCalculator(20));
-            engine.Add(Calculation.Sma50, new SmaCalculator(50));
             engine.Add(Calculation.Ema12, new EmaCalculator(12));
-            engine.Add(Calculation.Ema20, new EmaCalculator(20));
+            engine.Add(Calculation.Ema13, new EmaCalculator(13));
+            engine.Add(Calculation.Ema14, new EmaCalculator(14));
+            engine.Add(Calculation.Ema15, new EmaCalculator(15));
+            engine.Add(Calculation.Ema26, new EmaCalculator(26));
+            engine.Add(Calculation.Ema39, new EmaCalculator(39));
+            engine.Add(Calculation.Ema42, new EmaCalculator(42));
+            engine.Add(Calculation.Ema45, new EmaCalculator(45));
+            engine.Add(Calculation.Ema55, new EmaCalculator(55));
+            engine.Add(Calculation.Ema100, new EmaCalculator(100));
+            engine.Add(Calculation.MACD12_26, new MacdCalculator(12, 26));	
+            engine.Add(Calculation.MACDX12_26, new MacdCalculator(12, 26));		
+            engine.Add(Calculation.MACD13_39, new MacdCalculator(13, 39));		
+            engine.Add(Calculation.MACDX13_39, new MacdCalculator(13, 39));	
+            engine.Add(Calculation.MACD14_42, new MacdCalculator(14, 42));	
+            engine.Add(Calculation.MACDX14_42, new MacdCalculator(14, 42));	
+            engine.Add(Calculation.MACD15_45, new MacdCalculator(15, 45));	
+            engine.Add(Calculation.MACDX15_45, new MacdCalculator(15, 45));	
+            engine.Add(Calculation.MACD15_55, new MacdCalculator(15, 55));
+            engine.Add(Calculation.MACDX15_55, new MacdCalculator(15, 55));	
             return engine;
         }
     }
