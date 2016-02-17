@@ -20,9 +20,11 @@ CREATE TABLE [dbo].[Stocks](
 	[Close] [decimal](16, 2) NOT NULL,
 	[Volume] [decimal](16, 2) NOT NULL,
 	[AdjClose] [decimal](16, 2) NOT NULL,
-	[Sma_12] [decimal](16, 2) NOT NULL,
-	[Sma_20] [decimal](16, 2) NOT NULL,
-	[Sma_50] [decimal](16, 2) NOT NULL
+	[Sma12] [decimal](16, 2) NOT NULL,
+	[Sma20] [decimal](16, 2) NOT NULL,
+	[Sma50] [decimal](16, 2) NOT NULL,
+	[Ema12] [decimal](16, 2) NOT NULL,
+	[Ema20] [decimal](16, 2) NOT NULL
 ) ON [PRIMARY]
 
 GO

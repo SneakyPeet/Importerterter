@@ -9,7 +9,7 @@ namespace StockImport
     class Program
     {
         
-        private const string filesDirectory = "C:\\Development\\stocks\\Data";
+        private const string filesDirectory = "C:\\Development\\stocks\\Data2";
         private const string connectionString = "Server=.;Database=Stocks;Trusted_Connection=True;";
         private const string tableName = "dbo.Stocks";
         
@@ -43,6 +43,8 @@ namespace StockImport
             engine.Add(Calculation.Sma12, new MovingAverageCalculator(12));
             engine.Add(Calculation.Sma20, new MovingAverageCalculator(20));
             engine.Add(Calculation.Sma50, new MovingAverageCalculator(50));
+            engine.Add(Calculation.Ema12, new ExponentialMovingAverageCalculator(12));
+            engine.Add(Calculation.Ema20, new ExponentialMovingAverageCalculator(20));
             return engine;
         }
     }

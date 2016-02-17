@@ -42,7 +42,16 @@ namespace StockImport.Calculators
             // add new value to the sum
             this.sum += nextValue;
 
-            if (!this.IsMature)
+            this.UpdateWindow(nextValue);
+
+            this.IncrementOldestWindowValueIndex();
+
+            return this.sum / this.totalValuesInWindow;
+        }
+
+        private void UpdateWindow(decimal nextValue)
+        {
+            if(!this.IsMature)
             {
                 // we haven't yet filled our window
                 this.totalValuesInWindow++;
@@ -55,10 +64,6 @@ namespace StockImport.Calculators
 
             // store the value
             this.windowValues[this.oldestWindowValueIndex] = nextValue;
-
-            this.IncrementOldestWindowValueIndex();
-
-            return this.sum / this.totalValuesInWindow;
         }
 
         private void IncrementOldestWindowValueIndex()

@@ -4,7 +4,7 @@
     {
         Sma12,
         Ema12,
-        Macd15_60,
+        Ema20,
         Sma20,
         Sma50
     }
