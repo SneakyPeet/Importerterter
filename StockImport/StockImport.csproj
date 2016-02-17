@@ -68,12 +68,13 @@
     <Compile Include="Calculators\MovingAverageCalculator.cs" />
     <Compile Include="Domain\Calculation.cs" />
     <Compile Include="Domain\ICalculator.cs" />
-    <Compile Include="Domain\ShareImporter.cs" />
-    <Compile Include="Helpers\ImportExtensions.cs" />
+    <Compile Include="Domain\IQuote.cs" />
+    <Compile Include="Domain\QuoteExtensions.cs" />
+    <Compile Include="Import\ShareImporter.cs" />
+    <Compile Include="Import\ImportExtensions.cs" />
     <Compile Include="Domain\ProcessEngine.cs" />
     <Compile Include="Domain\Share.cs" />
-    <Compile Include="Domain\Quote.cs" />
-    <Compile Include="Helpers\Constants.cs" />
+    <Compile Include="Import\QuoteImport.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage\IShareRepository.cs" />
@@ -101,7 +102,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Import\StockTable.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

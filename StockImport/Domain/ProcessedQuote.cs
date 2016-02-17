@@ -5,11 +5,11 @@ namespace StockImport.Domain
 {
     public class ProcessedQuote : Dictionary<Calculation, Decimal>
     {
-        public ProcessedQuote(Quote stock)
+        public ProcessedQuote(IQuote stock)
         {
             this.Quote = stock;
         }
 
-        public Quote Quote { get; private set; }
+        public IQuote Quote { get; private set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using StockImport.Calculators;
-using StockImport.Helpers;
+using StockImport.Import;
 
 namespace StockImport.Domain
 {
@@ -11,13 +11,12 @@ namespace StockImport.Domain
         public string Id { get; private set; }
         public IReadOnlyList<Calculation> Calculations { get; private set; }
 
-        public Share(string filePath, ProcessEngine engine)
+        public Share(string id, IEnumerable<IQuote> quotes, ProcessEngine engine)
         {
-            this.Id = filePath.ToShareId();
+            this.Id = id;
 
             this.ProcessedQuotes = 
-                filePath
-                .ReadFile()
+                quotes
                 .Clean()
                 .Order()
                 .ToProcessableStock();

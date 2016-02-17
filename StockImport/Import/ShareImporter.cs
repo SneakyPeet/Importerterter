@@ -1,4 +1,4 @@
-﻿using StockImport.Helpers;
+﻿using StockImport.Import;
 using StockImport.Storage;
 
 namespace StockImport.Domain
@@ -21,7 +21,9 @@ namespace StockImport.Domain
             foreach(var file in files)
             {
                 processEngine.Reset();
-                var share = new Share(file, processEngine);
+                var shareId = file.ToShareId();
+                var quotes = file.ReadFile();
+                var share = new Share(shareId, quotes, processEngine);
                 repo.Save(share);
                 totalRecords += share.ProcessedQuotes.Count;
             }

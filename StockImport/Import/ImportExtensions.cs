@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FileHelpers;
 using StockImport.Domain;
 
-namespace StockImport.Helpers
+namespace StockImport.Import
 {
     public static class ImportExtensions
     {
@@ -19,28 +18,10 @@ namespace StockImport.Helpers
             return Directory.GetFiles(directoryPath);
         }
 
-        public static IEnumerable<Quote> ReadFile(this string filePath)
+        public static IEnumerable<IQuote> ReadFile(this string filePath)
         {
-            var fileEngine = new DelimitedFileEngine<Quote>();
+            var fileEngine = new DelimitedFileEngine<QuoteImport>();
             return fileEngine.ReadFile(filePath);
-        }
-
-        public static IEnumerable<Quote> Order(this IEnumerable<Quote> stock)
-        {
-            return stock.OrderBy(x => x.Date);
-        }
-
-        public static IEnumerable<Quote> Clean(this IEnumerable<Quote> stock)
-        {
-            //todo
-            return stock;
-        }
-
-        public static List<ProcessedQuote> ToProcessableStock(this IEnumerable<Quote> stock)
-        {
-            return stock
-                .Select(x => new ProcessedQuote(x))
-                .ToList();
         }
 
         public static int Write(this List<ProcessedQuote> stock, string path)
